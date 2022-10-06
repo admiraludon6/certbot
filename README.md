@@ -19,7 +19,13 @@ Once enabled, install all the required packages with the following command:
 [root@localhost ~]$ yum install certbot python2-certbot-apache mod_ssl
 ```
 ### 2) Obtain and Install SSL for Your Domain
+
 Now that Certbot is installed, you can use it to obtain and install an SSL certificate for your domain.
+
+> Important note : letsencrypt have a Failed Validation limit. Make sure all the information is correct before generating a certificate challenges
+
+Refer : [Lets Encrypt Rate Limit](https://letsencrypt.org/docs/rate-limits/)
+
 Simply run the following command to obtain and install an SSL certificate for your domain:
 ```bash
 [root@localhost ~]$ certbot --apache -d domain.com
@@ -34,10 +40,50 @@ We will be asked to provide an email address and agree to the terms of service.
 ```
 Use the following for manual challenges - where the certificate is not generated on the same server of the web server (apache server)
 
+## Generate certificate without webserver
 ```bash
 # No need to specify web server (apache)
 [root@localhost ~]$ certbot -d 'example.com' -d '*.example.com' --manual --preferred-challenges dns certonly
 ```
+Make sure you have access to your domain provider A record.
+
+you ned to add below acme challenge in your A record
+
+```
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Plugins selected: Authenticator manual, Installer None
+Starting new HTTPS connection (1): acme-v02.api.letsencrypt.org
+Requesting a certificate for example.com and *.example.com
+Performing the following challenges:
+dns-01 challenge for example.com
+dns-01 challenge for example.com
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Please deploy a DNS TXT record under the name
+_acme-challenge.example.com with the following value:
+
+gSL3Rqel4Tiq3lZLLYrcukredjvY9arfR-ymKLXgMYQ
+
+Before continuing, verify the record is deployed.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Press Enter to Continue
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Please deploy a DNS TXT record under the name
+_acme-challenge.example.com with the following value:
+
+DwbxRB3S_UNyhCQB0-YCxxK3rFCME_6kqes_ANW7O4E
+
+Before continuing, verify the record is deployed.
+(This must be set up in addition to the previous challenges; do not remove,
+replace, or undo the previous challenge tasks yet. Note that you might be
+asked to create multiple distinct TXT records with the same name. This is
+permitted by DNS standards.)
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+```
+
 
 We will be asked to provide an email address and agree to the terms of service.
 ```
